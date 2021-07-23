@@ -8,15 +8,14 @@ const inputTransactionAmount = document.querySelector('#amount')
 
 
 
-let dummyTransactions = [
-    { id: 1, name: 'Bolo de brigadeiro', amount: -20 },
-    { id: 2, name: 'Salário', amount: 300 },
-    { id: 3, name: 'Torta de frango', amount: -10 },
-    { id: 4, name: 'Violão', amount: 150 }
-]
+const LocalStorageTransactions = JSON.parse(localStorage
+    .getItem('transactions'))
+let transactions = localStorage
+.getItem('transactions') !== null ? LocalStorageTransactions : []
 
 const removeTransaction = ID => {
-    dummyTransactions = dummyTransactions.filter(transaction => transaction.id !== ID)
+    transactions = transactions.filter(transaction => 
+        transaction.id !== ID)
     init()
 }
 
@@ -42,7 +41,7 @@ const addTransactionIntoDOM = transaction => {
 /* formatação opcional de código [ enter antes do ponto (antes de chamar o operador) ]*/ 
 
 const updateBalanceValues = () => {
-    const transactionsAmounts = dummyTransactions
+    const transactionsAmounts = transactions
     .map(transaction => transaction.amount)
     const total = transactionsAmounts
     .reduce((accumulator, transaction) => accumulator + transaction, 0)
@@ -64,7 +63,7 @@ const updateBalanceValues = () => {
 
 const init = () => {
     transactionsUl.innerHTML = ''
-    dummyTransactions.forEach(addTransactionIntoDOM)
+    transactions.forEach(addTransactionIntoDOM)
     updateBalanceValues()
 }
 
@@ -90,7 +89,7 @@ form.addEventListener('submit', event => {
     }
     
 
-    dummyTransactions.push(transaction)
+    transactions.push(transaction)
     init()
 
 
