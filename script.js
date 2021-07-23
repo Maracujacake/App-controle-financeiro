@@ -8,12 +8,17 @@ const inputTransactionAmount = document.querySelector('#amount')
 
 
 
-const dummyTransactions = [
+let dummyTransactions = [
     { id: 1, name: 'Bolo de brigadeiro', amount: -20 },
     { id: 2, name: 'Salário', amount: 300 },
     { id: 3, name: 'Torta de frango', amount: -10 },
     { id: 4, name: 'Violão', amount: 150 }
 ]
+
+const removeTransaction = ID => {
+    dummyTransactions = dummyTransactions.filter(transaction => transaction.id !== ID)
+    init()
+}
 
 const addTransactionIntoDOM = transaction => {
 
@@ -24,7 +29,11 @@ const addTransactionIntoDOM = transaction => {
 
     li.classList.add(CSSClass)
     li.innerHTML = `
-    ${transaction.name} <span>${operator} R$ ${AmountWithoutOperator}</span><button class="delete-btn">x</button>
+        ${transaction.name}
+        <span>${operator} R$ ${AmountWithoutOperator}</span>
+        <button class="delete-btn" onClick="removeTransaction(${transaction.id})">
+        x
+        </button>
     `
 
     transactionsUl.append(li)
@@ -54,6 +63,7 @@ const updateBalanceValues = () => {
 
 
 const init = () => {
+    transactionsUl.innerHTML = ''
     dummyTransactions.forEach(addTransactionIntoDOM)
     updateBalanceValues()
 }
@@ -73,6 +83,15 @@ form.addEventListener('submit', event => {
         return
     }
 
-    const transaction = { id: IDgenerator(), name: transactionName, amount: transactionAmount }
-    console.log(transaction)
+    const transaction = { 
+        id: IDgenerator(),
+        name: transactionName,
+        amount: Number(transactionAmount)
+    }
+    
+
+    dummyTransactions.push(transaction)
+    init()
+
+
 })
