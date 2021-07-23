@@ -60,10 +60,19 @@ const init = () => {
 
 init()
 
-form.addEventListener('submit', event =>{
+const IDgenerator = () => Math.round(Math.random() * 1000)
+
+form.addEventListener('submit', event => {
     event.preventDefault()
 
-    if(inputTransactionName.value.trim() === '' || inputTransactionAmount.value.trim() === ''){
+    const transactionName = inputTransactionName.value.trim()
+    const transactionAmount = inputTransactionAmount.value.trim()
+
+    if(transactionName === '' || transactionAmount === '') {
         alert('Por favor, preencha ambos os campos')
+        return
     }
+
+    const transaction = { id: IDgenerator(), name: transactionName, amount: transactionAmount }
+    console.log(transaction)
 })
