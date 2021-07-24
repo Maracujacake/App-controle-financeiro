@@ -76,7 +76,7 @@ const updateLocalStorage = () => {
 
 const IDgenerator = () => Math.round(Math.random() * 1000)
 
-form.addEventListener('submit', event => {
+const handleFormSubmit = event => {
     event.preventDefault()
 
     const transactionName = inputTransactionName.value.trim()
@@ -98,5 +98,8 @@ form.addEventListener('submit', event => {
     init()
     updateLocalStorage()
 
+    inputTransactionAmount.value= ''
+    inputTransactionName.value = ''
+}
 
-})
+form.addEventListener('submit', handleFormSubmit )
