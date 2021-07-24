@@ -41,20 +41,25 @@ const addTransactionIntoDOM = transaction => {
 }
 /* formatação opcional de código [ enter antes do ponto (antes de chamar o operador) ]*/ 
 
-const updateBalanceValues = () => {
-    const transactionsAmounts = transactions
-    .map(transaction => transaction.amount)
-    const total = transactionsAmounts
-    .reduce((accumulator, transaction) => accumulator + transaction, 0)
-    .toFixed(2)
-    const income = transactionsAmounts
-    .filter(value => value > 0)
-    .reduce((accumulator, value) => accumulator + value, 0)
-    .toFixed(2)
-    const expense = Math.abs( transactionsAmounts
+const getExpenses = transactionsAmounts => Math.abs(transactionsAmounts
     .filter(value => value < 0)
     .reduce((accumulator, value) => accumulator + value, 0))
     .toFixed(2)
+    
+const getIncome = transactionsAmounts => transactionsAmounts
+.filter(value => value > 0)
+.reduce((accumulator, value) => accumulator + value, 0)
+.toFixed(2)
+
+const getTotal = transactionsAmounts => transactionsAmounts
+.reduce((accumulator, transaction) => accumulator + transaction, 0)
+.toFixed(2)
+
+const updateBalanceValues = () => {
+    const transactionsAmounts = transactions.map(({ amount }) => amount)
+    const total = getTotal(transactionsAmounts)
+    const income = getIncome(transactionsAmounts)
+    const expense = getExpenses(transactionsAmounts)
 
     balanceDisplay.textContent = `R$ ${total}`
     incomeDisplay.textContent = `R$ ${income}`
@@ -84,13 +89,19 @@ const addTransactionsArray = (transactionName, transactionAmount) => {
     })
 }
 
+const cleanInputs = () => {
+    inputTransactionAmount.value= ''
+    inputTransactionName.value = ''
+}
+
 const handleFormSubmit = event => {
     event.preventDefault()
 
     const transactionName = inputTransactionName.value.trim()
     const transactionAmount = inputTransactionAmount.value.trim()
+    const isSomeInputEmpty = transactionName === '' || transactionAmount === ''
 
-    if(transactionName === '' || transactionAmount === '') {
+    if(isSomeInputEmpty) {
         alert('Por favor, preencha ambos os campos')
         return
     }
@@ -98,9 +109,7 @@ const handleFormSubmit = event => {
     addTransactionsArray(transactionName, transactionAmount)
     init()
     updateLocalStorage()
-
-    inputTransactionAmount.value= ''
-    inputTransactionName.value = ''
+    cleanInputs()
 }
 
 form.addEventListener('submit', handleFormSubmit )
