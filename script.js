@@ -76,6 +76,14 @@ const updateLocalStorage = () => {
 
 const IDgenerator = () => Math.round(Math.random() * 1000)
 
+const addTransactionsArray = (transactionName, transactionAmount) => {
+    transactions.push({ 
+        id: IDgenerator(),
+        name: transactionName,
+        amount: Number(transactionAmount)
+    })
+}
+
 const handleFormSubmit = event => {
     event.preventDefault()
 
@@ -87,14 +95,7 @@ const handleFormSubmit = event => {
         return
     }
 
-    const transaction = { 
-        id: IDgenerator(),
-        name: transactionName,
-        amount: Number(transactionAmount)
-    }
-    
-
-    transactions.push(transaction)
+    addTransactionsArray(transactionName, transactionAmount)
     init()
     updateLocalStorage()
 
